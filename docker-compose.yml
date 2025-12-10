@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # 1. O Banco de Dados (Postgres)
+  meu-banco:
+    image: postgres:15-alpine
+    container_name: container-banco
+    ports:
+      - "5432:5432" # Libera a porta pro seu Windows ver
+    environment:
+      - POSTGRES_DB=api_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+
+  # 2. Sua Aplicação Java
+  minha-api:
+    build: . # Usa o Dockerfile que criamos antes
+    container_name: container-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - meu-banco # Espera o banco ligar primeiro
+    environment:
+      # AQUI ESTÁ A MÁGICA:
+      # Em vez de 'localhost', usamos o nome do serviço 'meu-banco'
+      # Isso sobrescreve o application.properties sem precisar mexer no código!
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://meu-banco:5432/api_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
