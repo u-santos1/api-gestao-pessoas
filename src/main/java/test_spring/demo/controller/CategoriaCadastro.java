@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.validation.Valid;
 import org.hibernate.metamodel.model.domain.ListPersistentAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import test_spring.demo.DTO.PessoasRequestDTO;
@@ -33,6 +34,7 @@ public class CategoriaCadastro {
         return repository.save(categoria);
     }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public PessoasResponseDTO criarPessoas(@RequestBody @Valid PessoasRequestDTO dto){
         Pessoas pessoaSalva = service.salvar(dto);
         return new PessoasResponseDTO(pessoaSalva);
