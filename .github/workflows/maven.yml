@@ -1,0 +1,31 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixa o seu código
+      - uses: actions/checkout@v3
+
+      # 2. Instala o Java 17 no computador do GitHub
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache:maven: true
+
+      # 3. Dá permissão para executar o Maven (Linux precisa disso)
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
+      # 4. Roda os Testes (O comando Clean Test)
+      - name: Test with Maven
+        run: ./mvnw clean test
