@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoTestRule;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestPropertySource;
 import test_spring.demo.DTO.PessoasRequestDTO;
 import test_spring.demo.Servico.PessoasService;
 import test_spring.demo.model.Categoria;
@@ -20,6 +21,14 @@ import test_spring.demo.repository.PessoaRepository;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL",
+        "spring.datasource.driverClassName=org.h2.Driver",
+        "spring.datasource.username=sa",
+        "spring.datasource.password=",
+        "spring.jpa.hibernate.ddl-auto=create-drop",
+        "spring.flyway.enabled=false"
+})
 @ExtendWith(MockitoExtension.class)
 public class PessoaServiceTest {
 
