@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoTestRule;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import test_spring.demo.DTO.PessoasRequestDTO;
 import test_spring.demo.Servico.PessoasService;
@@ -22,13 +23,16 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
-@TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL",
-        "spring.datasource.driverClassName=org.h2.Driver",
+@SpringBootTest(properties = {
+        // 1. URL (Removi o MODE=PostgreSQL para evitar confusão, H2 puro é mais seguro para testes simples)
+        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+        "spring.datasource.driver-class-name=org.h2.Driver",
         "spring.datasource.username=sa",
         "spring.datasource.password=",
+        "spring.flyway.enabled=false",
         "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.flyway.enabled=false"
+        // 2. A CORREÇÃO FINAL: Força o Hibernate a falar "H2 nativo"
+        "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect"
 })
 public class PessoaServiceTest {
 
