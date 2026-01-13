@@ -12,7 +12,7 @@ public class PessoasResponseDTO {
     private String email;
     private String nomeCategoria;
 
-    public PessoasResponseDTO(Pessoas pessoas){
+    public PessoasResponseDTO (Pessoas pessoas){
         this.id = pessoas.getId();
         this.nome = pessoas.getNome();
         this.email = pessoas.getEmail();

@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
 
+import java.util.List;
+import java.util.Optional;
+
 
 @Data
 @Entity
@@ -23,7 +26,7 @@ public class Pessoas {
     @Email
     private String email;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 

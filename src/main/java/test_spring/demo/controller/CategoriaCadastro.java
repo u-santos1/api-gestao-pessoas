@@ -15,6 +15,8 @@ import test_spring.demo.model.Pessoas;
 import test_spring.demo.repository.CategoriaRepository;
 import test_spring.demo.repository.PessoaRepository;
 
+import javax.xml.stream.Location;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,23 +32,26 @@ public class CategoriaCadastro {
     PessoasService service;
 
     @PostMapping("/categoria")
-    public Categoria CriarCategoria(@RequestBody Categoria categoria){
+    public Categoria CriarCategoria( @RequestBody Categoria categoria){
         return repository.save(categoria);
     }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PessoasResponseDTO criarPessoas(@RequestBody @Valid PessoasRequestDTO dto){
-        Pessoas pessoaSalva = service.salvar(dto);
-        return new PessoasResponseDTO(pessoaSalva);
+    @PostMapping("/{id}")
+    public ResponseEntity<PessoasResponseDTO> criarPessoas(@PathVariable Long id, @RequestBody @Valid PessoasRequestDTO dto){
+        PessoasResponseDTO pessoaSalva = service.salvar(id, dto);
+        URI location = URI.create("/pessoas/" + id);
+        return ResponseEntity.created(location).body(pessoaSalva);
     }
     @GetMapping
     public List<PessoasResponseDTO> listarTodos(){
         return service.listarTodos();
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<PessoasResponseDTO> atualizar(@PathVariable Long id,@RequestBody PessoasRequestDTO dto){
         Pessoas pessoas = service.atualizar(id, dto);
         return ResponseEntity.ok(new PessoasResponseDTO(pessoas));
+
+
     }@DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id){
         service.deletar(id);

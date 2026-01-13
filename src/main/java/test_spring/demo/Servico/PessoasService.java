@@ -1,11 +1,13 @@
 package test_spring.demo.Servico;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test_spring.demo.DTO.PessoasRequestDTO;
 import test_spring.demo.DTO.PessoasResponseDTO;
 import test_spring.demo.DTO.infra.RecursoNaoEncotradoException;
+import test_spring.demo.mapper.PessoaMap;
 import test_spring.demo.model.Categoria;
 import test_spring.demo.model.Pessoas;
 import test_spring.demo.repository.CategoriaRepository;
@@ -20,22 +22,27 @@ import java.util.ListIterator;
 @Service
 public class PessoasService {
 
-    @Autowired
-    PessoaRepository repository;
+    final private PessoaRepository repository;
+    final private CategoriaRepository categoriaRepository;
+    final private PessoaMap pessoaMap;
 
-    @Autowired
-    CategoriaRepository categoriaRepository;
+    public PessoasService(PessoaRepository repository, CategoriaRepository categoriaRepository, PessoaMap pessoaMap){
+        this.repository = repository;
+        this.categoriaRepository = categoriaRepository;
+        this.pessoaMap = pessoaMap;
+    }
 
-    public Pessoas salvar(PessoasRequestDTO dto) {
-        Categoria categoria = categoriaRepository.findById(dto.getCategoriaId())
+    @Transactional
+    public PessoasResponseDTO salvar(Long id, PessoasRequestDTO dto) {
+        Pessoas pessoas = repository.findById(id).orElseThrow(() -> new RecursoNaoEncotradoException("Pessoa nao encontrada"));
+        Categoria categoria = categoriaRepository.findById(dto.categoriaId())
                 .orElseThrow(() -> new RecursoNaoEncotradoException("Categoria nao encontrada!"));
 
-        Pessoas pessoas = new Pessoas();
-        pessoas.setNome(dto.getNome());
-        pessoas.setEmail(dto.getEmail());
-
+        pessoas.setNome(dto.nome());
+        pessoas.setEmail(dto.email());
         pessoas.setCategoria(categoria);
-        return repository.save(pessoas);
+
+        return pessoaMap.toDTO(pessoas);
     }
     public List<PessoasResponseDTO> listarTodos(){
         List<Pessoas> pessoasBanco = repository.findAll();
@@ -50,8 +57,8 @@ public class PessoasService {
         Categoria novaCategoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncotradoException("Categoria nao encontrada"));
 
-        existente.setNome(dto.getNome());
-        existente.setEmail(dto.getEmail());
+        existente.setNome(dto.nome());
+        existente.setEmail(dto.email());
         existente.setCategoria(novaCategoria);
         return repository.save(existente);
     }

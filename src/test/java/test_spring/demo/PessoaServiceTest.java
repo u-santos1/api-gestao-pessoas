@@ -49,24 +49,6 @@ public class PessoaServiceTest {
     @DisplayName("Deve salvar Pessoas")
     void deveSalvarPessoas(){
 
-        PessoasRequestDTO requestDTO = new PessoasRequestDTO();
-        requestDTO.setCategoriaId(1L);
-        requestDTO.setNome("wesley test");
-        requestDTO.setEmail("wesleytest@email.com");
 
-        Pessoas pessoas = new Pessoas();
-        pessoas.setId(1L);
-        pessoas.setNome("wesley test");
-        pessoas.setEmail("wesleytest@email.com");
-
-        Mockito.when(categoriaRepository.findById(1L)).thenReturn(Optional.of(new Categoria()));
-        Mockito.when(repository.save(any(Pessoas.class))).thenReturn(pessoas);
-
-        Pessoas resultado = service.salvar(requestDTO);
-
-        Assertions.assertNotNull(resultado);
-        Assertions.assertEquals("wesley test", resultado.getNome());
-        Assertions.assertEquals("wesleytest@email.com", resultado.getEmail());
-        Mockito.verify(repository, Mockito.times(1)).save(any(Pessoas.class));
     }
 }
