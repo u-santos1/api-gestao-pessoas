@@ -6,7 +6,7 @@ import test_spring.demo.DTO.PessoasResponseDTO;
 import test_spring.demo.model.Pessoas;
 
 @Mapper(componentModel = "spring")
-public interface PessoaMap {
+public interface  PessoaMap {
 
     Pessoas toEntity(PessoasRequestDTO dto);
 

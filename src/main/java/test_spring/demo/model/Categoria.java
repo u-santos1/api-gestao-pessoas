@@ -3,10 +3,13 @@ package test_spring.demo.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Categoria {
 
@@ -15,7 +18,6 @@ public class Categoria {
     private Long id;
     private String nome;
 
-    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Pessoas> pessoas;
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+    private List<Pessoas> pessoa;
 }

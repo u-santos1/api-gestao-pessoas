@@ -6,14 +6,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 import java.util.Optional;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class Pessoas {
@@ -29,7 +32,6 @@ public class Pessoas {
     @ManyToOne(optional = false)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
-
     public Pessoas(Long id, String nome, String email){
         this.id = id;
         this.nome = nome;

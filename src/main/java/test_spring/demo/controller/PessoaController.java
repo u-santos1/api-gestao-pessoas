@@ -1,49 +1,43 @@
 package test_spring.demo.controller;
 
-import jakarta.persistence.GeneratedValue;
 import jakarta.validation.Valid;
-import org.hibernate.metamodel.model.domain.ListPersistentAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import test_spring.demo.DTO.PessoasRequestDTO;
 import test_spring.demo.DTO.PessoasResponseDTO;
 import test_spring.demo.Servico.PessoasService;
+import test_spring.demo.mapper.PessoaMap;
 import test_spring.demo.model.Categoria;
 import test_spring.demo.model.Pessoas;
 import test_spring.demo.repository.CategoriaRepository;
 import test_spring.demo.repository.PessoaRepository;
 
-import javax.xml.stream.Location;
 import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/pessoas")
-public class CategoriaCadastro {
+public class PessoaController {
 
-    @Autowired
-    private CategoriaRepository repository;
-    @Autowired
-    private PessoaRepository pessoaRepository;
+    final private PessoaRepository pessoaRepository;
+    final private PessoasService service;
 
-    @Autowired
-    PessoasService service;
-
-    @PostMapping("/categoria")
-    public Categoria CriarCategoria( @RequestBody Categoria categoria){
-        return repository.save(categoria);
+    public PessoaController(PessoaRepository pessoaRepository, PessoasService service){
+        this.pessoaRepository = pessoaRepository;
+        this.service = service;
     }
-    @PostMapping("/{id}")
-    public ResponseEntity<PessoasResponseDTO> criarPessoas(@PathVariable Long id, @RequestBody @Valid PessoasRequestDTO dto){
-        PessoasResponseDTO pessoaSalva = service.salvar(id, dto);
-        URI location = URI.create("/pessoas/" + id);
+
+    @PostMapping
+    public ResponseEntity<PessoasResponseDTO> criarPessoas(@RequestBody @Valid PessoasRequestDTO dto){
+        PessoasResponseDTO pessoaSalva = service.salvar(dto);
+        URI location = URI.create("/api/pessoas/" + pessoaSalva.getId());
         return ResponseEntity.created(location).body(pessoaSalva);
     }
     @GetMapping
-    public List<PessoasResponseDTO> listarTodos(){
-        return service.listarTodos();
+    public ResponseEntity<List<PessoasResponseDTO>> listarTodos(){
+        List<PessoasResponseDTO> dtos = service.listarTodos();
+        return ResponseEntity.ok(dtos);
     }
 
     @PutMapping("/{id}")

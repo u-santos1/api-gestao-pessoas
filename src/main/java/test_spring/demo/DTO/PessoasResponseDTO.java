@@ -10,15 +10,12 @@ public class PessoasResponseDTO {
     private Long id;
     private String nome;
     private String email;
-    private String nomeCategoria;
+
 
     public PessoasResponseDTO (Pessoas pessoas){
         this.id = pessoas.getId();
         this.nome = pessoas.getNome();
         this.email = pessoas.getEmail();
 
-        if (pessoas.getCategoria() != null){
-            this.nomeCategoria = pessoas.getCategoria().getNome();
-        }
     }
 }

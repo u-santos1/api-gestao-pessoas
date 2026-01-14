@@ -1,17 +1,19 @@
 package test_spring.demo.Servico;
 
 
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test_spring.demo.DTO.PessoasRequestDTO;
 import test_spring.demo.DTO.PessoasResponseDTO;
+import test_spring.demo.DTO.RequestCategoriaDTO;
+import test_spring.demo.DTO.ResponseCategoriaDTO;
 import test_spring.demo.DTO.infra.RecursoNaoEncotradoException;
 import test_spring.demo.mapper.PessoaMap;
 import test_spring.demo.model.Categoria;
 import test_spring.demo.model.Pessoas;
 import test_spring.demo.repository.CategoriaRepository;
 import test_spring.demo.repository.PessoaRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 
 
 import java.util.Collection;
@@ -31,24 +33,36 @@ public class PessoasService {
         this.categoriaRepository = categoriaRepository;
         this.pessoaMap = pessoaMap;
     }
+    @Transactional
+    public ResponseCategoriaDTO criarCategoria(RequestCategoriaDTO data){
+        Pessoas pessoas = repository.findById(data.PessoaId()).orElseThrow(() -> new RecursoNaoEncotradoException("Pessoa nao encontrada"));
+        Categoria categoria = new Categoria();
+        categoria.setNome(data.nome());
+
+        categoriaRepository.save(categoria);
+        pessoas.setCategoria(categoria);
+        repository.save(pessoas);
+
+        return ResponseCategoriaDTO.fromEntity(categoria);
+
+    }
 
     @Transactional
-    public PessoasResponseDTO salvar(Long id, PessoasRequestDTO dto) {
-        Pessoas pessoas = repository.findById(id).orElseThrow(() -> new RecursoNaoEncotradoException("Pessoa nao encontrada"));
+    public PessoasResponseDTO salvar(PessoasRequestDTO dto) {
         Categoria categoria = categoriaRepository.findById(dto.categoriaId())
-                .orElseThrow(() -> new RecursoNaoEncotradoException("Categoria nao encontrada!"));
+                .orElseThrow(()-> new RecursoNaoEncotradoException("categoria nao encontrada"));
 
-        pessoas.setNome(dto.nome());
-        pessoas.setEmail(dto.email());
-        pessoas.setCategoria(categoria);
-
-        return pessoaMap.toDTO(pessoas);
+        Pessoas entity = pessoaMap.toEntity(dto);
+        entity.setCategoria(categoria);
+        Pessoas salva = repository.save(entity);
+        return pessoaMap.toDTO(salva);
     }
+    @Transactional(readOnly = true)
     public List<PessoasResponseDTO> listarTodos(){
         List<Pessoas> pessoasBanco = repository.findAll();
 
         return pessoasBanco.stream().
-                map(pessoas -> new PessoasResponseDTO(pessoas))
+                map(pessoaMap::toDTO)
                 .toList();
     }
     public Pessoas atualizar(Long id, PessoasRequestDTO dto){
