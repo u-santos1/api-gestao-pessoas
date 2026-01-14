@@ -1,10 +1,10 @@
 package test_spring.demo.DTO;
 
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record RequestCategoriaDTO(
-        Long id, @NotNull
-        String nome,
-        Long PessoaId) {
+        @NotNull Long pessoaId,
+        @NotBlank String nome) {
 }

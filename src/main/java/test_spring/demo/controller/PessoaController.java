@@ -2,6 +2,7 @@ package test_spring.demo.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import test_spring.demo.DTO.PessoasRequestDTO;
@@ -31,7 +32,7 @@ public class PessoaController {
     @PostMapping
     public ResponseEntity<PessoasResponseDTO> criarPessoas(@RequestBody @Valid PessoasRequestDTO dto){
         PessoasResponseDTO pessoaSalva = service.salvar(dto);
-        URI location = URI.create("/api/pessoas/" + pessoaSalva.getId());
+        URI location = URI.create("/api/pessoas/" + pessoaSalva.id());
         return ResponseEntity.created(location).body(pessoaSalva);
     }
     @GetMapping
@@ -41,9 +42,9 @@ public class PessoaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PessoasResponseDTO> atualizar(@PathVariable Long id,@RequestBody PessoasRequestDTO dto){
-        Pessoas pessoas = service.atualizar(id, dto);
-        return ResponseEntity.ok(new PessoasResponseDTO(pessoas));
+    public ResponseEntity<PessoasResponseDTO> atualizar(@PathVariable Long id,@RequestBody PessoasRequestDTO data){
+        PessoasResponseDTO dto = service.atualizar(id, data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 
 
     }@DeleteMapping("/{id}")
@@ -55,7 +56,7 @@ public class PessoaController {
     public List<PessoasResponseDTO> buscarPorCategoria(@RequestParam String nome){
         List<Pessoas> listar = pessoaRepository.findByCategoriaNome(nome);
         return listar.stream()
-                .map(PessoasResponseDTO :: new)
+                .map(PessoasResponseDTO :: toDTO)
                 .toList();
     }
 }

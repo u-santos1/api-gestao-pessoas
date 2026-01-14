@@ -16,10 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
-import java.util.Collection;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.ListIterator;
+
 
 @Service
 public class PessoasService {
@@ -33,20 +32,6 @@ public class PessoasService {
         this.categoriaRepository = categoriaRepository;
         this.pessoaMap = pessoaMap;
     }
-    @Transactional
-    public ResponseCategoriaDTO criarCategoria(RequestCategoriaDTO data){
-        Pessoas pessoas = repository.findById(data.PessoaId()).orElseThrow(() -> new RecursoNaoEncotradoException("Pessoa nao encontrada"));
-        Categoria categoria = new Categoria();
-        categoria.setNome(data.nome());
-
-        categoriaRepository.save(categoria);
-        pessoas.setCategoria(categoria);
-        repository.save(pessoas);
-
-        return ResponseCategoriaDTO.fromEntity(categoria);
-
-    }
-
     @Transactional
     public PessoasResponseDTO salvar(PessoasRequestDTO dto) {
         Categoria categoria = categoriaRepository.findById(dto.categoriaId())
@@ -65,7 +50,7 @@ public class PessoasService {
                 map(pessoaMap::toDTO)
                 .toList();
     }
-    public Pessoas atualizar(Long id, PessoasRequestDTO dto){
+    public PessoasResponseDTO atualizar(Long id, PessoasRequestDTO dto){
         Pessoas existente = repository.findById(id)
                 .orElseThrow(()-> new RecursoNaoEncotradoException("Pessoa nao encotrada"));
         Categoria novaCategoria = categoriaRepository.findById(id)
@@ -74,7 +59,8 @@ public class PessoasService {
         existente.setNome(dto.nome());
         existente.setEmail(dto.email());
         existente.setCategoria(novaCategoria);
-        return repository.save(existente);
+        Pessoas salvar = repository.save(existente);
+        return PessoasResponseDTO.toDTO(salvar);
     }
     public void deletar(Long id){
         if(!repository.existsById(id)) {
