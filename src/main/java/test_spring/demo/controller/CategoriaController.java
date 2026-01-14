@@ -26,4 +26,9 @@ public class CategoriaController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
+    @GetMapping
+    public ResponseEntity<List<ResponseCategoriaDTO>> listaTodos(){
+        List<ResponseCategoriaDTO> data = categoriaService.listarTodos();
+        return ResponseEntity.ok(data);
+    }
 }
