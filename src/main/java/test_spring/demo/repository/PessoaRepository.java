@@ -10,13 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PessoaRepository extends JpaRepository<Pessoas, Long>{
-    List<Pessoas> findByCategoriaNome(String nomeCategoria);
-    @Query("""
-    SELECT p FROM Pessoas p
-    JOIN FETCH p.categoria
-""")
-    List<Pessoas> findAllComCategoria();
-
-
+    Page<Pessoas> findByCategoriaNome(String nomeCategoria, Pageable pageable);
 
 }
