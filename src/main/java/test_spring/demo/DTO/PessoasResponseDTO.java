@@ -2,9 +2,6 @@ package test_spring.demo.DTO;
 
 
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import test_spring.demo.model.Pessoas;
 
 

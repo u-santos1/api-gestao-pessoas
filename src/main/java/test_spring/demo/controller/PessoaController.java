@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import test_spring.demo.DTO.PessoasRequestDTO;
 import test_spring.demo.DTO.PessoasResponseDTO;
 import test_spring.demo.Servico.PessoasService;
-import test_spring.demo.mapper.PessoaMap;
 import test_spring.demo.model.Categoria;
 import test_spring.demo.model.Pessoas;
 import test_spring.demo.repository.CategoriaRepository;

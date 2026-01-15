@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import test_spring.demo.DTO.RequestCategoriaDTO;
 import test_spring.demo.DTO.ResponseCategoriaDTO;
 import test_spring.demo.DTO.infra.RecursoNaoEncotradoException;
-import test_spring.demo.mapper.PessoaMap;
+
 import test_spring.demo.model.Categoria;
 import test_spring.demo.model.Pessoas;
 import test_spring.demo.repository.CategoriaRepository;
@@ -19,7 +19,7 @@ public class CategoriaService {
 
     final private CategoriaRepository categoriaRepository;
     final private PessoaRepository repository;
-    public CategoriaService(PessoaRepository repository, CategoriaRepository categoriaRepository, PessoaMap pessoaMap){
+    public CategoriaService(PessoaRepository repository, CategoriaRepository categoriaRepository){
         this.categoriaRepository = categoriaRepository;
         this.repository = repository;
     }
