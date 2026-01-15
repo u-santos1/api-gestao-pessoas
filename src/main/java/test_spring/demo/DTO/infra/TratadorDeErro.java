@@ -22,7 +22,7 @@ public class TratadorDeErro {
     @Autowired
     private MessageSource messageSource;
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(RecursoNaoEncotradoException.class)
     public ErroDTO tratarErro404(RecursoNaoEncotradoException ex){
         return new ErroDTO("id", ex.getMessage());
