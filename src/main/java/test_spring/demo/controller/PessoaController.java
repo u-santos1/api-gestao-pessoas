@@ -56,8 +56,8 @@ public class PessoaController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/por-categoria")
-    public ResponseEntity<List<PessoasResponseDTO>> buscarPorCategoria(@RequestParam String nome){
-        List<PessoasResponseDTO> listaDTO = service.buscarPorCategoria(nome);
+    public ResponseEntity<Page<PessoasResponseDTO>> buscarPorCategoria(@RequestParam String nome, Pageable pageable){
+        Page<PessoasResponseDTO> listaDTO = service.buscarPorCategoria(nome, pageable);
         return ResponseEntity.ok().body(listaDTO);
     }
 }
