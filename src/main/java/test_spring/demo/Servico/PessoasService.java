@@ -40,12 +40,9 @@ public class PessoasService {
         return PessoasResponseDTO.toDTO(salva);
     }
     @Transactional(readOnly = true)
-    public List<PessoasResponseDTO> listarTodos(){
-        List<Pessoas> pessoasBanco = repository.findAll();
-
-        return pessoasBanco.stream().
-                map(PessoasResponseDTO::toDTO)
-                .toList();
+    public Page<PessoasResponseDTO> listarTodos(Pageable paginacao){
+        return repository.findAll(paginacao)
+                .map(PessoasResponseDTO::toDTO);
     }
     public PessoasResponseDTO atualizar(Long id, PessoasRequestDTO dto){
         Pessoas existente = repository.findById(id)
