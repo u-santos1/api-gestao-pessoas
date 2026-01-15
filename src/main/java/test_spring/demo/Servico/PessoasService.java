@@ -66,11 +66,9 @@ public class PessoasService {
             throw new RecursoNaoEncotradoException("Pessoas nao encotrada com id");
         }
         repository.deleteById(id);
-    }
-    public List<PessoasResponseDTO> buscarPorCategoria(String nome){
-        List<Pessoas> listar = repository.findByCategoriaNome(nome);
-        return listar.stream()
-                .map(PessoasResponseDTO :: toDTO)
-                .toList();
+    }@Transactional(readOnly = true)
+    public Page<PessoasResponseDTO> buscarPorCategoria(String nomeCategoria, Pageable pageable){
+        Page<Pessoas> paginaDePessoas = repository.findByCategoriaNome(nomeCategoria, pageable);
+        return paginaDePessoas.map(PessoasResponseDTO::toDTO);
     }
 }
