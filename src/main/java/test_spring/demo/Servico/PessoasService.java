@@ -50,7 +50,7 @@ public class PessoasService {
     public PessoasResponseDTO atualizar(Long id, PessoasRequestDTO dto){
         Pessoas existente = repository.findById(id)
                 .orElseThrow(()-> new RecursoNaoEncotradoException("Pessoa nao encotrada"));
-        Categoria novaCategoria = categoriaRepository.findById(id)
+        Categoria novaCategoria = categoriaRepository.findById(dto.categoriaId())
                 .orElseThrow(() -> new RecursoNaoEncotradoException("Categoria nao encontrada"));
 
         existente.setNome(dto.nome());
