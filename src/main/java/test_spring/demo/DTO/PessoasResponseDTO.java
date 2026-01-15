@@ -2,7 +2,10 @@ package test_spring.demo.DTO;
 
 
 
+import test_spring.demo.model.Categoria;
 import test_spring.demo.model.Pessoas;
+
+import java.util.List;
 
 
 public record PessoasResponseDTO(Long id,

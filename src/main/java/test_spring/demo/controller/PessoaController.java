@@ -2,6 +2,9 @@ package test_spring.demo.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,7 @@ import test_spring.demo.model.Pessoas;
 import test_spring.demo.repository.CategoriaRepository;
 import test_spring.demo.repository.PessoaRepository;
 
+import java.awt.desktop.UserSessionEvent;
 import java.net.URI;
 import java.util.List;
 
@@ -35,8 +39,8 @@ public class PessoaController {
         return ResponseEntity.created(location).body(pessoaSalva);
     }
     @GetMapping
-    public ResponseEntity<List<PessoasResponseDTO>> listarTodos(){
-        List<PessoasResponseDTO> dtos = service.listarTodos();
+    public ResponseEntity<Page<PessoasResponseDTO>> listarTodos(@PageableDefault(size = 10, sort = "nome") Pageable pageable){
+        Page<PessoasResponseDTO> dtos = service.listarTodos(pageable);
         return ResponseEntity.ok(dtos);
     }
 
@@ -52,10 +56,8 @@ public class PessoaController {
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/por-categoria")
-    public List<PessoasResponseDTO> buscarPorCategoria(@RequestParam String nome){
-        List<Pessoas> listar = pessoaRepository.findByCategoriaNome(nome);
-        return listar.stream()
-                .map(PessoasResponseDTO :: toDTO)
-                .toList();
+    public ResponseEntity<List<PessoasResponseDTO>> buscarPorCategoria(@RequestParam String nome){
+        List<PessoasResponseDTO> listaDTO = service.buscarPorCategoria(nome);
+        return ResponseEntity.ok().body(listaDTO);
     }
 }

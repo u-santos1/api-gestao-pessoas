@@ -1,6 +1,9 @@
 package test_spring.demo.Servico;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import test_spring.demo.DTO.PessoasRequestDTO;
 import test_spring.demo.DTO.PessoasResponseDTO;
 import test_spring.demo.DTO.infra.RecursoNaoEncotradoException;
@@ -12,6 +15,8 @@ import test_spring.demo.repository.CategoriaRepository;
 import test_spring.demo.repository.PessoaRepository;
 
 import org.springframework.transaction.annotation.Transactional;
+
+
 import java.util.List;
 
 
