@@ -65,4 +65,10 @@ public class PessoasService {
         }
         repository.deleteById(id);
     }
+    public List<PessoasResponseDTO> buscarPorCategoria(String nome){
+        List<Pessoas> listar = repository.findByCategoriaNome(nome);
+        return listar.stream()
+                .map(PessoasResponseDTO :: toDTO)
+                .toList();
+    }
 }
